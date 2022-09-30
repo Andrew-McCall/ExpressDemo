@@ -1,4 +1,5 @@
-const { json } = require("body-parser");
+const mongoose = require("mongoose");
+const {TrainerModel} = require("../Data/Trainers")
 const chai = require("chai");
 const chaiHttp = require("chai-http");
 const server = require("../index")
@@ -8,8 +9,11 @@ chai.use(chaiHttp);
 // let server = null
 let url = "localhost:3001";
 
-before("Start Server", function(){
-    // Change DB connection to test
+before("Start Server", async function(){
+    await mongoose.connection.close()
+    await mongoose.connect("mongodb://127.0.0.1:27017/QATest")
+    console.log("Test DB Connected!")
+    TrainerModel.deleteMany({});
 })
 
 describe("API", function(){
