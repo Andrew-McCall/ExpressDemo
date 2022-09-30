@@ -9,11 +9,11 @@ chai.use(chaiHttp);
 // let server = null
 const url = "localhost:3001";
 
-before("Start Server", async function(){
+before("Start Server", async function(done){
     await mongoose.connection.close()
     await mongoose.connect("mongodb://127.0.0.1:27017/QATest")
     console.log("Test DB Connected!")
-    TrainerModel.deleteMany({});
+    done();
 })
 
 describe("API", function(){
@@ -51,16 +51,27 @@ describe("API", function(){
 
 describe("Trainers", function(){
 
-    it("/getAll", function(done){
-        chai.request(url+"/trainers").get("/getAll").then( res => {
-
-            // chai.expect(err).to.be.null;
-            chai.expect(res).to.have.status(200)
-
-            // console.log(res.body).to.equal(testBodyVariable)
-            done()
-        })
+    this.beforeAll("Test Data", async function(done){
+        await TrainerModel.deleteMany({});
+        // await TrainerModel.create(TestOne);
+        // await TrainerModel.create(TestTwo);
+        done()
     })
+
+    it("/getAll", function(done){
+        TrainerModel.find({}).then(ts => {
+            chai.request(url+"/trainers").get("/getAll").then( res => {
+
+                // chai.expect(err).to.be.null;
+                chai.expect(res).to.have.status(200)
+                chai.expect(res.body).to.equal(ts)
+
+                done()
+            })
+        })
+        
+    })
+
 
 })
 
