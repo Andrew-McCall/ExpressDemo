@@ -9,17 +9,17 @@ router.get("/getAll", (req, res) => {
     })
 })
 
-// router.get("/getOne", (req, res) => {
-//     TrainerModel.find({}).then(ts => {
-//         res.status(200).json(ts)
-//     }).catch((err)=> {
-//         res.status(500).json(err)
-//     })
-// })
+router.get("/getOne", (req, res) => {
+    TrainerModel.findOne(req.body.id).then(ts => {
+        res.status(200).json(ts)
+    }).catch((err)=> {
+        res.status(500).json(err)
+    })
+})
 
 router.post("/create", (req, res) => {
     TrainerModel.create(req.body).then(t => {
-        res.status(200).json(t)
+        res.status(201).json(t)
     }).catch((err)=> {
         res.status(500).json(err)
     })
