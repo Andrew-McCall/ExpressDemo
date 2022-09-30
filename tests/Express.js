@@ -7,7 +7,7 @@ const server = require("../index")
 chai.use(chaiHttp);
 
 // let server = null
-let url = "localhost:3001";
+const url = "localhost:3001";
 
 before("Start Server", async function(){
     await mongoose.connection.close()
@@ -18,30 +18,31 @@ before("Start Server", async function(){
 
 describe("API", function(){
 
-    it("/get", function(){
-        chai.request(url+"/api").get("/get").end((err, res) => {
+    it("/get", function(done){
+        chai.request(url+"/api").get("/get").then(res => {
 
-            chai.expect(err).to.be.null;
+            // chai.expect(err).to.be.null;
             chai.expect(res).to.have.status(200)
 
             chai.expect(res).to.have.property("text")
             chai.expect(res.text).to.equal("Hello World!")
             
+            done()
         })
     })
 
-    it("/post", function(){
+    it("/post", function(done){
         const body = {test:'test Data'}
-        chai.request(url+"/api").post("/post").send(body).end((err, res) => {
+        chai.request(url+"/api").post("/post").send(body).then(res => {
 
-            chai.expect(err).to.be.null;
+            // chai.expect(err).to.be.null;
             chai.expect(res).to.have.status(201)
 
             chai.expect(res.body).to.have.property("test")
             chai.expect(res.body.test).to.equal(body.test);
 
             chai.expect(JSON.stringify(res.body)).to.equal(JSON.stringify(body))
-
+            done();
         })
     })
 
@@ -50,14 +51,14 @@ describe("API", function(){
 
 describe("Trainers", function(){
 
-    it("/getAll", function(){
-        chai.request(url+"/trainers").get("/getAll").end((err, res) => {
+    it("/getAll", function(done){
+        chai.request(url+"/trainers").get("/getAll").then( res => {
 
-            chai.expect(err).to.be.null;
+            // chai.expect(err).to.be.null;
             chai.expect(res).to.have.status(200)
 
             // console.log(res.body).to.equal(testBodyVariable)
-            
+            done()
         })
     })
 
